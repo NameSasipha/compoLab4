@@ -10,6 +10,8 @@ import EventLayoutViewVue from '@/views/event/EventLayoutView.vue'
 import NetworkErrorView from '@/views/NetworkErrorView.vue'
 import NotFoundview from '@/views/NotFoundView.vue'
 import NProgress  from 'nprogress'
+import EventService from '@/services/EventService'
+// import { error } from 'console'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +42,22 @@ const router = createRouter({
       name: 'event-layout',
       component: EventLayoutViewVue,
       props: true,
+      beforeEnter: (to) => {
+        const id : number =  parseInt(to.params.id as string)
+        return EventService.getEventByID(id)
+        .then((Response) => {
+          //need to set up the data for the cmponent
+        }).catch((error) => {
+          if (error.Response && error.Response.status === 404) {
+            return {
+              name : '404-resource',
+              params: {resource: 'event'}
+            }
+          }else {
+            return {name : 'network-error'}
+          }
+        })
+      },
       children: [
         {
           path: '',
