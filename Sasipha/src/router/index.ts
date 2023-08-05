@@ -12,6 +12,7 @@ import NotFoundview from '@/views/NotFoundView.vue'
 import NProgress  from 'nprogress'
 import EventService from '@/services/EventService'
 // import { error } from 'console'
+import { useEventStore} from '@/stores/event'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,9 +45,11 @@ const router = createRouter({
       props: true,
       beforeEnter: (to) => {
         const id : number =  parseInt(to.params.id as string)
+        const eventStore = useEventStore()
         return EventService.getEventByID(id)
         .then((Response) => {
           //need to set up the data for the cmponent
+          eventStore.setEvent(Response.data)
         }).catch((error) => {
           if (error.Response && error.Response.status === 404) {
             return {
