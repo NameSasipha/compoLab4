@@ -1,3 +1,4 @@
+
 <template>
   <main class="events">
     <EventCard v-for="event in events" :key="event.id" :event="event"></EventCard>
@@ -21,21 +22,10 @@ import type { Ref } from 'vue'
 import eventService from '@/services/EventService'
 import EventService from '@/services/EventService'
 import type { Axios,AxiosResponse } from 'axios'
- 
-
-watchEffect(() =>{
-  EventService.getEvent(props.size, props.page).then((response: AxiosResponse<EventItem[]>) => {
-    events.value = response.data
-      totalEvent.value = response.headers['x-total-count']
-  })
-})
-
-const hasNextPage = computed(() => {
-  //fist calculate the total page
-  const totalPages = Math.ceil(totalEvent.value/props.size)
-  return props.page.valueOf() < totalPages
-})
-
+import NProgress from 'nprogress'
+import { useRouter } from 'vue-router'
+const event: Ref<EventItem[]> =ref([])
+const router = useRouter()
 const events: Ref<Array<EventItem>> = ref([])
 const totalEvent = ref<number>(0)
 const props = defineProps({
@@ -49,6 +39,32 @@ const props = defineProps({
     }
 
 })
+ 
+
+// watchEffect(() =>{
+//   EventService.getEvent(props.size, props.page).then((response: AxiosResponse<EventItem[]>) => {
+//     events.value = response.data
+//       totalEvent.value = response.headers['x-total-count']
+//   })
+// })
+
+NProgress.start()
+EventService.getEvent(2, props.page).then((Response: AxiosResponse<EventItem[]>) => {
+  event.value = Response.data
+  totalEvent.value = Response.headers['x-total-count']
+}).catch(() => {
+  router.push({name: 'NetworkError'})
+}).finally(() => {
+  NProgress.done()
+})
+
+const hasNextPage = computed(() => {
+  //fist calculate the total page
+  const totalPages = Math.ceil(totalEvent.value/props.size)
+  return props.page.valueOf() < totalPages
+})
+
+
   
 </script>
 
