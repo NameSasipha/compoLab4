@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { useMessageStore } from './stores/message';
+import { storeToRefs } from 'pinia';
+const store = useMessageStore()
+const {message} = storeToRefs(store)
 import {ref} from 'vue'
 const sizes = ref<number>(2)
 </script>
 
 <template>
   <header>
+    <div class="flashMessage" v-if="message">
+    <h4> {{ message }}</h4></div>
     <div class="wrapper">
       <nav>
         <RouterLink :to="{name: 'event-list'}">Home</RouterLink>
@@ -64,7 +70,7 @@ nav a:first-of-type {
     display: flex;
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
-  }
+  }}
 
   .logo {
     margin: 0 2rem 0 0;
@@ -86,6 +92,17 @@ nav a:first-of-type {
   }
   h4{
     font-size: 20px;
+    }
+
+  @keyframes yellowfade {
+    from {
+      background: yellow;
+    } to {
+      background: transparent;
+    }
   }
-}
+  .flashMessage {
+    animation: yellowfade 3s ease-in-out;
+  }
+
 </style>

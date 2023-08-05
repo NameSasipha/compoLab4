@@ -1,14 +1,14 @@
-import { defineStrore } from 'pinia'
-export const useMessageStore = defineStrore('messge', {
-    state () => ({
+import { defineStore } from 'pinia'
+export const useMessageStore = defineStore('message', {
+    state: () => ({
         message: '' as string
-    })
-}),
- action: {
-    updateMessage(message: string) {
-        this.message = message
-    },
-    resetMessage(){
-        this.message = ''
+    }),
+    actions: {
+        updateMessage(message: string) {
+            this.message = message
+        },
+        resetMessage() {
+            this.message = ''
+        }
     }
- }
+})
