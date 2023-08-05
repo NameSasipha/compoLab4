@@ -51,7 +51,7 @@ const props = defineProps({
 // })
 
 // NProgress.start()
-EventService.getEvent(2, props.page).then((Response: AxiosResponse<EventItem[]>) => {
+EventService.getEvent(props.size, props.page).then((Response: AxiosResponse<EventItem[]>) => {
   event.value = Response.data
   totalEvent.value = Response.headers['x-total-count']
 }).catch(() => {
@@ -65,7 +65,7 @@ import { onBeforeRouteUpdate } from 'vue-router'
 onBeforeRouteUpdate((to, from , next) => {
   const toPage = Number(to.query.page)
   // NProgress.start()
-  EventService.getEvent(2, toPage).then((response: AxiosResponse<EventItem[]>) => {
+  EventService.getEvent(props.size, toPage).then((response: AxiosResponse<EventItem[]>) => {
     events.value = response.data
     totalEvent.value = response.headers['x-total-count']
     next()
