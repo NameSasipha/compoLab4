@@ -21,7 +21,19 @@ const router = createRouter({
       path: '/',
       name: 'event-list',
       component: EventListView,
-      props: (route) => ({page: parseInt(route.query?.page as string || '1')  })
+      props: (route) => ({page: parseInt(route.query?.page as string || '1')  }),
+
+      beforeEnter: (to, _, next) => {
+        if (
+          !to.query?.page ||
+          parseInt(to.query?.page as string) < 1 ||
+          isNaN(parseInt(to.query?.page as string))
+        ) {
+          next({ name: 'event-list', query: { page: 1 } })
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/about',

@@ -19,10 +19,10 @@ const sizes = ref<number>(2)
         <RouterLink :to="{name: 'student'}">Student</RouterLink>
 
       </nav>
-      <div class="size">
+      <!-- <div class="size">
         <label>  Size : </label>
         <input class="sizes" type="number" v-model="sizes" />
-      </div>
+      </div> -->
     </div>
   </header>
   <h1>Events for Good</h1>
